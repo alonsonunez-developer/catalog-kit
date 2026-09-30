@@ -32,3 +32,4 @@ export const PageSchema = z.object({
 export type Section = z.infer<typeof SectionSchema>
 export type Theme = z.infer<typeof ThemeSchema>
 export type Page = z.infer<typeof PageSchema>
+export * from './data'

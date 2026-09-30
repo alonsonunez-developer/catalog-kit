@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { PageSchema } from '../schema'
+import { PageSchema, CatalogDataSchema, type CatalogDataInput } from '../schema'
 import { getComponent } from '../registry'
 import { resolveTheme, themeToStyle } from '../themes'
+import { provideCatalogData } from './context'
 
-const props = defineProps<{ page: unknown }>()
+const props = defineProps<{ page: unknown; data?: CatalogDataInput }>()
 
 const parsed = computed(() => PageSchema.safeParse(props.page))
+
+const catalogData = computed(() => {
+  const r = CatalogDataSchema.safeParse(props.data ?? {})
+  return r.success ? r.data : CatalogDataSchema.parse({})
+})
+provideCatalogData(catalogData)
 
 const themeStyle = computed(() =>
   parsed.value.success ? themeToStyle(resolveTheme(parsed.value.data.theme)) : {},

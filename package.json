@@ -1,16 +1,35 @@
 {
   "name": "catalog-kit",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
   "scripts": {
     "dev": "vite --config playground/vite.config.ts",
     "play": "vite --config playground/vite.config.ts",
-    "typecheck": "vue-tsc -b"
+    "build": "vite build --config vite.lib.config.ts",
+    "build:watch": "vite build --watch --config vite.lib.config.ts",
+    "typecheck": "vue-tsc -b",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
-  "dependencies": {
-    "vue": "^3.5.42",
-    "zod": "^4.6.5"
+  "peerDependencies": {
+    "vue": "^3.5.0",
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -18,6 +37,7 @@
     "@vitejs/plugin-vue": "^6.0.8",
     "@vue/test-utils": "^2.5.1",
     "@vue/tsconfig": "^0.9.1",
+    "jsdom": "^30.1.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",

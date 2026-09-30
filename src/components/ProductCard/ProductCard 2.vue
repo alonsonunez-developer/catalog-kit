@@ -22,14 +22,6 @@ const formattedPrice = computed(() =>
   >
     <div class="aspect-square w-full overflow-hidden" :style="{ backgroundColor: 'var(--ck-bg)' }">
       <img v-if="image" :src="image" :alt="name" loading="lazy" class="h-full w-full object-cover" />
-      <div
-        v-else
-        class="flex h-full w-full items-center justify-center text-4xl"
-        :style="{ color: 'var(--ck-muted)', fontFamily: 'var(--ck-font-heading)' }"
-        aria-hidden="true"
-      >
-        {{ name.charAt(0).toUpperCase() }}
-      </div>
     </div>
     <div class="flex flex-1 flex-col gap-1 p-4">
       <h3 class="text-lg leading-tight" :style="{ fontFamily: 'var(--ck-font-heading)' }">{{ name }}</h3>

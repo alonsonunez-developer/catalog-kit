@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { PageSchema, CatalogDataSchema, type CatalogDataInput } from '../schema'
-import { getComponent } from '../registry'
 import { resolveTheme, themeToStyle } from '../themes'
 import { provideCatalogData } from './context'
+import { getComponent, registerComponent } from '../registry'
+import { builtinComponents } from '../components'
+
+builtinComponents.forEach(registerComponent)
 
 const props = defineProps<{ page: unknown; data?: CatalogDataInput }>()
 

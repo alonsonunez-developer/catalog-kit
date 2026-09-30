@@ -1,4 +1,4 @@
-import './components' // registra los componentes
+export { builtinComponents } from './components'
 export { useCatalogData } from './renderer/context'
 export { ProductGridDefinition } from './components/ProductGrid/ProductGrid.definition'
 export { default as PageRenderer } from './renderer/PageRenderer.vue'

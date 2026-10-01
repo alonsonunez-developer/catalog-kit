@@ -1,11 +1,20 @@
 import type { Component } from 'vue'
 import type { z } from 'zod'
 
+export interface SlotDefinition {
+  min: number
+  max: number
+  label: string
+}
+
 export interface ComponentDefinition {
   name: string
   description: string
-  category: string
+  category: string // 'layout' | 'catalog' | 'marketing' | 'page-layout'…
   propsSchema: z.ZodType // los defaults viven en el schema con .default()
+  // Los layouts de página declaran cuántos productos admiten. El renderer los resuelve
+  // y se los pasa al componente en la prop "products".
+  slots?: { products?: SlotDefinition }
   component: Component
 }
 

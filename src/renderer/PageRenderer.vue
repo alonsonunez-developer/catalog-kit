@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
-import { PageSchema, CatalogDataSchema, type CatalogDataInput } from '../schema'
+import { PageSchema, CatalogDataSchema, pageEntries, type CatalogDataInput } from '../schema'
 import { getComponent, registerComponent } from '../registry'
 import { builtinComponents } from '../components'
 import { resolveTheme, themeToStyle } from '../themes'
@@ -18,6 +18,8 @@ const catalogData = computed(() => {
 })
 provideCatalogData(catalogData)
 
+const productsById = computed(() => new Map(catalogData.value.products.map((p) => [p.id, p])))
+
 // Si la categoría seleccionada deja de existir (cambian los datos), se limpia el filtro
 const selectedCategory = provideCategoryFilter()
 watch(catalogData, (d) => {
@@ -32,12 +34,21 @@ const themeStyle = computed(() =>
 
 const items = computed(() => {
   if (!parsed.value.success) return []
-  return parsed.value.data.sections.map((s) => {
+  return pageEntries(parsed.value.data).map((s) => {
     const def = getComponent(s.type)
     if (!def) return { id: s.id, error: `Componente desconocido: "${s.type}"` }
     const r = def.propsSchema.safeParse(s.props)
     if (!r.success) return { id: s.id, error: `Props inválidas en "${s.type}": ${r.error.message}` }
-    return { id: s.id, component: def.component, props: r.data as Record<string, unknown> }
+    const componentProps: Record<string, unknown> = { ...(r.data as Record<string, unknown>) }
+    const slot = def.slots?.products
+    if (slot) {
+      // Los ids que ya no existen (producto borrado u oculto) se omiten sin romper la página
+      componentProps.products = (s.slots.products ?? [])
+        .map((id) => productsById.value.get(id))
+        .filter((p) => p !== undefined)
+        .slice(0, slot.max)
+    }
+    return { id: s.id, component: def.component, props: componentProps }
   })
 })
 </script>

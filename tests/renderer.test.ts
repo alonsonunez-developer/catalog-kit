@@ -17,6 +17,44 @@ const data = {
 const pageWith = (sections: unknown[]) => ({ version: 1, theme: 'pasteleria', sections })
 
 describe('PageRenderer', () => {
+
+  it('catálogo v2: ProductFeature muestra producto, oferta y atributos del negocio', () => {
+    const dataVestidos = {
+      attributeDefs: [
+        { key: 'talla', label: 'Tallas', type: 'list' as const },
+        { key: 'color', label: 'Color', type: 'text' as const },
+      ],
+      products: [
+        {
+          id: 'v1', name: 'Vestido Rosa', price: 900, compareAtPrice: 1200, sku: 'VR-01',
+          attributes: { talla: ['S', 'M'], color: 'Rosa' },
+        },
+      ],
+    }
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, theme: 'pasteleria', pages: [{ id: 'p1', layout: 'ProductFeature', slots: { products: ['v1'] } }] },
+        data: dataVestidos,
+      },
+    })
+    expect(w.text()).toContain('Vestido Rosa')
+    expect(w.text()).toContain('$900.00')
+    expect(w.find('s').text()).toBe('$1,200.00')
+    expect(w.text()).toContain('Tallas')
+    expect(w.text()).toContain('S, M')
+    expect(w.text()).toContain('VR-01')
+  })
+
+  it('catálogo v2: un producto que ya no existe no rompe la página', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'p1', layout: 'ProductFeature', slots: { products: ['borrado'] } }] },
+        data,
+      },
+    })
+    expect(w.text()).toContain('Producto no disponible')
+  })
+
   it('muestra un error si el Page JSON es inválido', () => {
     const w = mount(PageRenderer, { props: { page: { version: 99 } } })
     expect(w.text()).toContain('Page JSON inválido')

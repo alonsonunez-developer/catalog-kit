@@ -17,6 +17,13 @@ describe('componentes incluidos', () => {
     // Debe poder exportarse como JSON Schema (base para la IA)
     expect(() => z.toJSONSchema(def.propsSchema)).not.toThrow()
   })
+  it('los layouts de página declaran cuántos productos admiten', () => {
+    const layouts = builtinComponents.filter((c) => c.category === 'page-layout')
+    expect(layouts.length).toBeGreaterThan(0)
+    for (const l of layouts) {
+      expect(l.slots?.products?.max).toBeGreaterThanOrEqual(1)
+    }
+  })
 })
 
 describe('registry', () => {

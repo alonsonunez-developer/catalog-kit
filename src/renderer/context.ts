@@ -4,7 +4,7 @@ import type { CatalogData } from '../schema/data'
 const DATA_KEY: InjectionKey<ComputedRef<CatalogData>> = Symbol('catalog-data')
 const FILTER_KEY: InjectionKey<Ref<string | null>> = Symbol('catalog-category-filter')
 
-const empty: CatalogData = { currency: 'MXN', business: {}, categories: [], products: [] }
+const empty: CatalogData = { currency: 'MXN', business: {}, attributeDefs: [], categories: [], products: [] }
 
 export function provideCatalogData(data: ComputedRef<CatalogData>) {
   provide(DATA_KEY, data)

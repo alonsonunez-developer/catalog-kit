@@ -8,7 +8,8 @@ import { provideCatalogData, provideCategoryFilter } from './context'
 
 builtinComponents.forEach(registerComponent)
 
-const props = defineProps<{ page: unknown; data?: CatalogDataInput }>()
+// "only": índice (desde 0) de la única página/sección que se dibuja. Sin él se dibujan todas.
+const props = defineProps<{ page: unknown; data?: CatalogDataInput; only?: number }>()
 
 const parsed = computed(() => PageSchema.safeParse(props.page))
 
@@ -34,7 +35,9 @@ const themeStyle = computed(() =>
 
 const items = computed(() => {
   if (!parsed.value.success) return []
-  return pageEntries(parsed.value.data).map((s) => {
+  let entries = pageEntries(parsed.value.data)
+  if (props.only !== undefined) entries = entries.slice(props.only, props.only + 1)
+  return entries.map((s) => {
     const def = getComponent(s.type)
     if (!def) return { id: s.id, error: `Componente desconocido: "${s.type}"` }
     const r = def.propsSchema.safeParse(s.props)

@@ -4,6 +4,10 @@ import { ProductGridDefinition } from './ProductGrid/ProductGrid.definition'
 import { BannerDefinition } from './Banner/Banner.definition'
 import { FooterDefinition } from './Footer/Footer.definition'
 import { ProductFeatureDefinition } from './ProductFeature/ProductFeature.definition'
+import { CoverDefinition } from './Cover/Cover.definition'
+import { ProductDuoDefinition } from './ProductDuo/ProductDuo.definition'
+import { ProductGrid8Definition } from './ProductGrid8/ProductGrid8.definition'
+import { ContactPageDefinition } from './ContactPage/ContactPage.definition'
 
 export const builtinComponents = [
   HeroDefinition,
@@ -12,4 +16,8 @@ export const builtinComponents = [
   BannerDefinition,
   FooterDefinition,
   ProductFeatureDefinition,
+  CoverDefinition,
+  ProductDuoDefinition,
+  ProductGrid8Definition,
+  ContactPageDefinition,
 ]

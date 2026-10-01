@@ -18,6 +18,55 @@ const pageWith = (sections: unknown[]) => ({ version: 1, theme: 'pasteleria', se
 
 describe('PageRenderer', () => {
 
+  it('ProductDuo muestra dos productos', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'p', layout: 'ProductDuo', slots: { products: ['1', '2'] } }] },
+        data,
+      },
+    })
+    expect(w.findAll('article')).toHaveLength(2)
+  })
+
+  it('ProductGrid8 admite como máximo 8 productos', () => {
+    const ids = ['1', '2', '3', '1', '2', '3', '1', '2', '3', '1']
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'p', layout: 'ProductGrid8', slots: { products: ids } }] },
+        data,
+      },
+    })
+    expect(w.findAll('article')).toHaveLength(8)
+  })
+
+  it('ContactPage toma los datos del negocio', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'p', layout: 'ContactPage' }] },
+        data: { business: { name: 'Dulce Hogar', whatsapp: '+52 636 000 0000' } },
+      },
+    })
+    expect(w.text()).toContain('Dulce Hogar')
+    expect(w.find('a[href="https://wa.me/526360000000"]').exists()).toBe(true)
+  })
+
+  it('"only" dibuja solo la página pedida', () => {
+    const page = {
+      version: 2,
+      pages: [
+        { id: 'a', layout: 'Cover', props: { title: 'Portada' } },
+        { id: 'b', layout: 'ContactPage', props: { title: 'Hablemos' } },
+      ],
+    }
+    const primera = mount(PageRenderer, { props: { page, only: 0 } })
+    expect(primera.text()).toContain('Portada')
+    expect(primera.text()).not.toContain('Hablemos')
+
+    const segunda = mount(PageRenderer, { props: { page, only: 1 } })
+    expect(segunda.text()).toContain('Hablemos')
+    expect(segunda.text()).not.toContain('Portada')
+  })
+
   it('catálogo v2: ProductFeature muestra producto, oferta y atributos del negocio', () => {
     const dataVestidos = {
       attributeDefs: [

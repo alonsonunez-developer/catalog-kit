@@ -3,7 +3,7 @@ import { defineComponent } from '../../registry'
 import Footer from './Footer.vue'
 
 export const FooterPropsSchema = z.object({
-  businessName: z.string().default('Mi negocio'),
+  businessName: z.string().optional(),
   tagline: z.string().optional(),
   email: z.string().optional(),
   phone: z.string().optional(),
@@ -14,7 +14,8 @@ export const FooterPropsSchema = z.object({
 
 export const FooterDefinition = defineComponent({
   name: 'Footer',
-  description: 'Pie de página con nombre del negocio y datos de contacto (teléfono, correo, WhatsApp, Instagram, dirección).',
+  description:
+  'Pie de página con nombre del negocio y contacto. Si no se indican props, toma los datos del negocio (nombre, teléfono, correo, WhatsApp, Instagram, dirección).',
   category: 'layout',
   propsSchema: FooterPropsSchema,
   component: Footer,

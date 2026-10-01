@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { PageSchema, CatalogDataSchema, type CatalogDataInput } from '../schema'
-import { resolveTheme, themeToStyle } from '../themes'
-import { provideCatalogData } from './context'
 import { getComponent, registerComponent } from '../registry'
 import { builtinComponents } from '../components'
+import { resolveTheme, themeToStyle } from '../themes'
+import { provideCatalogData, provideCategoryFilter } from './context'
 
 builtinComponents.forEach(registerComponent)
 
@@ -17,6 +17,14 @@ const catalogData = computed(() => {
   return r.success ? r.data : CatalogDataSchema.parse({})
 })
 provideCatalogData(catalogData)
+
+// Si la categoría seleccionada deja de existir (cambian los datos), se limpia el filtro
+const selectedCategory = provideCategoryFilter()
+watch(catalogData, (d) => {
+  if (selectedCategory.value && !d.categories.some((c) => c.id === selectedCategory.value)) {
+    selectedCategory.value = null
+  }
+})
 
 const themeStyle = computed(() =>
   parsed.value.success ? themeToStyle(resolveTheme(parsed.value.data.theme)) : {},

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useCatalogData } from '../../renderer/context'
+import { useCatalogData, useCategoryFilter } from '../../renderer/context'
 import ProductCard from '../ProductCard/ProductCard.vue'
 
 const props = defineProps<{
@@ -10,16 +10,24 @@ const props = defineProps<{
   categoryId?: string
   limit?: number
   showDescription: boolean
+  respectFilter: boolean
 }>()
 
 const data = useCatalogData()
+const selected = useCategoryFilter()
 
-const colClass = { 2: 'grid-cols-1 sm:grid-cols-2', 3: 'grid-cols-2 md:grid-cols-3', 4: 'grid-cols-2 md:grid-cols-4' }
+const colClass = {
+  2: 'grid-cols-1 sm:grid-cols-2',
+  3: 'grid-cols-2 md:grid-cols-3',
+  4: 'grid-cols-2 md:grid-cols-4',
+}
 const gapClass = { compact: 'gap-3', normal: 'gap-6', relaxed: 'gap-10' }
 
 const products = computed(() => {
   let list = data.value.products
-  if (props.categoryId) list = list.filter((p) => p.categoryId === props.categoryId)
+  // Un categoryId fijo en el diseño tiene prioridad sobre el filtro del visitante
+  const category = props.categoryId ?? (props.respectFilter ? selected.value : null)
+  if (category) list = list.filter((p) => p.categoryId === category)
   return props.limit ? list.slice(0, props.limit) : list
 })
 </script>

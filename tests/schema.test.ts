@@ -28,6 +28,6 @@ describe('datos del catálogo', () => {
 
   it('completa moneda, categorías y productos por defecto', () => {
     const d = CatalogDataSchema.parse({})
-    expect(d).toEqual({ currency: 'MXN', categories: [], products: [] })
+    expect(d).toEqual({ currency: 'MXN', business: {}, categories: [], products: [] })
   })
 })

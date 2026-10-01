@@ -9,6 +9,7 @@ export const ProductGridPropsSchema = z.object({
   categoryId: z.string().optional(),
   limit: z.number().int().positive().optional(),
   showDescription: z.boolean().default(false),
+  respectFilter: z.boolean().default(true),
 })
 
 export const ProductGridDefinition = defineComponent({

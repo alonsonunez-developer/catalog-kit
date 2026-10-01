@@ -91,4 +91,51 @@ describe('PageRenderer', () => {
     expect(w.text()).toContain('Pasteles (2)')
     expect(w.text()).toContain('Cupcakes (1)')
   })
+  it('CategoryList filtra el ProductGrid al pulsar una categoría', async () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: pageWith([
+          { id: 'c', type: 'CategoryList' },
+          { id: 'g', type: 'ProductGrid' },
+        ]),
+        data,
+      },
+    })
+    const button = (label: string) => w.findAll('button').find((b) => b.text().startsWith(label))!
+
+    expect(w.findAll('article')).toHaveLength(3)
+    await button('Cupcakes').trigger('click')
+    expect(w.findAll('article')).toHaveLength(1)
+    await button('Todas').trigger('click')
+    expect(w.findAll('article')).toHaveLength(3)
+  })
+
+  it('ProductGrid con respectFilter en false ignora el filtro', async () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: pageWith([
+          { id: 'c', type: 'CategoryList' },
+          { id: 'g', type: 'ProductGrid', props: { respectFilter: false } },
+        ]),
+        data,
+      },
+    })
+    await w.findAll('button').find((b) => b.text().startsWith('Cupcakes'))!.trigger('click')
+    expect(w.findAll('article')).toHaveLength(3)
+  })
+
+  it('Footer usa los datos del negocio y las props tienen prioridad', () => {
+    const conDatos = { ...data, business: { name: 'Dulce Hogar', phone: '6360000000' } }
+
+    const delNegocio = mount(PageRenderer, {
+      props: { page: pageWith([{ id: 'f', type: 'Footer' }]), data: conDatos },
+    })
+    expect(delNegocio.text()).toContain('Dulce Hogar')
+    expect(delNegocio.find('a[href="tel:6360000000"]').exists()).toBe(true)
+
+    const conProps = mount(PageRenderer, {
+      props: { page: pageWith([{ id: 'f', type: 'Footer', props: { businessName: 'Otro Nombre' } }]), data: conDatos },
+    })
+    expect(conProps.text()).toContain('Otro Nombre')
+  })
 })

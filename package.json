@@ -1,5 +1,7 @@
 {
-  "name": "catalog-kit",
+  "name": "@alonsonunez-developer/catalog-kit",
+  "repository": { "type": "git", "url": "git+https://github.com/alonsonunez-developer/catalog-kit.git" },
+  "publishConfig": { "registry": "https://npm.pkg.github.com" },
   "version": "0.1.0",
   "type": "module",
   "files": [
@@ -19,6 +21,7 @@
     "./style.css": "./dist/style.css"
   },
   "scripts": {
+    "prepublishOnly": "pnpm test && pnpm build",
     "dev": "vite --config playground/vite.config.ts",
     "play": "vite --config playground/vite.config.ts",
     "build": "vite build --config vite.lib.config.ts",

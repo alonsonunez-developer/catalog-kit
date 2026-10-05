@@ -6,21 +6,24 @@ export const SectionSchema = z.object({
   props: z.record(z.string(), z.unknown()).default({}),
 })
 
+const hexColor = z.string().regex(/^#[0-9a-fA-F]{6}$/)
+const fontStack = z.string().min(1).max(200).regex(/^[^;{}<>]*$/)
+
 export const ThemeSchema = z.object({
   name: z.string(),
   colors: z.object({
-    primary: z.string(),
-    background: z.string(),
-    surface: z.string(),
-    text: z.string(),
-    muted: z.string(),
-    onPrimary: z.string(),
+    primary: hexColor,
+    background: hexColor,
+    surface: hexColor,
+    text: hexColor,
+    muted: hexColor,
+    onPrimary: hexColor,
   }),
   fonts: z.object({
-    heading: z.string(),
-    body: z.string(),
+    heading: fontStack,
+    body: fontStack,
   }),
-  radius: z.string().default('0.5rem'),
+  radius: z.string().regex(/^\d+(\.\d+)?(rem|px)$/).default('0.5rem'),
 })
 
 // v2: una página del catálogo. "slots.products" son los ids de los productos de esa página.

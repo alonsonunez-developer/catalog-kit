@@ -46,3 +46,69 @@ export function themeToStyle(t: Theme): Record<string, string> {
     '--ck-radius': t.radius,
   }
 }
+
+// ===== Personalización =====
+
+export const fontOptions = [
+  { label: 'Playfair Display (elegante)', value: "'Playfair Display', Georgia, serif" },
+  { label: 'Cormorant Garamond (fina, de lujo)', value: "'Cormorant Garamond', Georgia, serif" },
+  { label: 'Lora (clásica)', value: "'Lora', Georgia, serif" },
+  { label: 'Pacifico (manuscrita)', value: "'Pacifico', cursive" },
+  { label: 'Inter (neutra)', value: "'Inter', system-ui, sans-serif" },
+  { label: 'Montserrat (moderna)', value: "'Montserrat', system-ui, sans-serif" },
+  { label: 'Poppins (redondeada)', value: "'Poppins', system-ui, sans-serif" },
+  { label: 'DM Sans (limpia)', value: "'DM Sans', system-ui, sans-serif" },
+  { label: 'Nunito (amable)', value: "'Nunito', system-ui, sans-serif" },
+]
+
+export const radiusOptions = [
+  { label: 'Rectos', value: '0rem' },
+  { label: 'Casi rectos', value: '0.125rem' },
+  { label: 'Suaves', value: '0.5rem' },
+  { label: 'Redondeados', value: '1.25rem' },
+]
+
+const HEX = /^#[0-9a-fA-F]{6}$/
+
+function luminance(hex: string): number {
+  if (!HEX.test(hex)) return 0
+  const n = parseInt(hex.slice(1), 16)
+  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
+    const c = v / 255
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+  })
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
+
+// Relación de contraste WCAG (de 1 a 21). 4.5 o más es legible para texto normal.
+export function contrastRatio(a: string, b: string): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x)
+  return (hi + 0.05) / (lo + 0.05)
+}
+
+// Blanco o casi negro, el que mejor se lea sobre ese fondo
+export function readableOn(bg: string): string {
+  return contrastRatio(bg, '#ffffff') >= contrastRatio(bg, '#111111') ? '#ffffff' : '#111111'
+}
+
+// Nombre del tema predefinido del que parte un tema (o un nombre)
+export function baseThemeName(theme: string | Theme): string {
+  const name = typeof theme === 'string' ? theme : theme.name.replace(/-custom$/, '')
+  return name in themes ? name : 'joyeria'
+}
+
+// Copia del tema con cambios. Si cambia el color principal, el texto de los botones se ajusta solo.
+export function customizeTheme(
+  base: Theme,
+  patch: { colors?: Partial<Theme['colors']>; fonts?: Partial<Theme['fonts']>; radius?: string },
+): Theme {
+  const colors = { ...base.colors, ...patch.colors }
+  if (patch.colors?.primary && !patch.colors.onPrimary) colors.onPrimary = readableOn(colors.primary)
+  return {
+    ...base,
+    name: base.name.endsWith('-custom') ? base.name : `${base.name}-custom`,
+    colors,
+    fonts: { ...base.fonts, ...patch.fonts },
+    radius: patch.radius ?? base.radius,
+  }
+}

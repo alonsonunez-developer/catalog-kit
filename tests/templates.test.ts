@@ -85,10 +85,30 @@ describe('plantillas', () => {
     expect(page.pages[0].props).toMatchObject({ title: 'Run', eyebrow: 'Nueva colección' })
     expect(PageSchema.safeParse(page).success).toBe(true)
   })
+  
   it('la plantilla Western usa portada western y 4 productos por página', () => {
     const page = buildPageFromTemplate(template('western'), { title: 'Frontier', products: products(5), categories: [] })
     expect(layouts(page)).toEqual(['WesternHero', 'ProductShowcase', 'ProductShowcase', 'ContactPage'])
     expect(page.pages[1].slots.products).toHaveLength(4)
     expect(PageSchema.safeParse(page).success).toBe(true)
+  })
+  
+  it('la plantilla Menú reparte 12 productos por página y titula con la categoría', () => {
+    const page = buildPageFromTemplate(template('menu'), { title: 'Carta', products: products(25), categories: [] })
+    expect(layouts(page)).toEqual(['Cover', 'PriceList', 'PriceList', 'PriceList', 'ContactPage'])
+    expect(page.pages.slice(1, 4).map((p) => p.slots.products.length)).toEqual([12, 12, 1])
+
+    const porCategoria = buildPageFromTemplate(template('menu'), {
+      title: 'Carta',
+      categories: [{ id: 'a', name: 'Postres' }],
+      products: products(2, 'a', 'a'),
+    })
+    expect(porCategoria.pages[1].props.title).toBe('Postres')
+    expect(PageSchema.safeParse(page).success).toBe(true)
+  })
+
+  it('la plantilla Destacados usa 2 productos por página', () => {
+    const page = buildPageFromTemplate(template('destacados'), { title: 'X', products: products(3), categories: [] })
+    expect(layouts(page)).toEqual(['Cover', 'ProductSplit', 'ProductSplit', 'ContactPage'])
   })
 })

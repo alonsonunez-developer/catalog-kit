@@ -322,4 +322,48 @@ describe('PageRenderer', () => {
     expect(w.text()).toContain('01')
     expect(w.text()).toContain('Flexible')
   })
+  it('PriceList muestra nombres, precios y descripción, sin fotos', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'l', layout: 'PriceList', props: { title: 'Postres' }, slots: { products: ['1', '2'] } }] },
+        data: {
+          products: [
+            { id: '1', name: 'Pay de limón', price: 65, description: 'Con merengue' },
+            { id: '2', name: 'Flan', price: 55 },
+          ],
+        },
+      },
+    })
+    expect(w.findAll('li')).toHaveLength(2)
+    expect(w.findAll('img')).toHaveLength(0)
+    for (const t of ['Postres', 'Pay de limón', '$65.00', 'Con merengue', 'Flan']) expect(w.text()).toContain(t)
+  })
+
+  it('PriceList oculta la descripción y los puntos si se pide', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: {
+          version: 2,
+          pages: [{ id: 'l', layout: 'PriceList', props: { showDescription: false, showDots: false }, slots: { products: ['1'] } }],
+        },
+        data: { products: [{ id: '1', name: 'Pay', price: 65, description: 'Con merengue' }] },
+      },
+    })
+    expect(w.text()).not.toContain('Con merengue')
+    expect(w.find('[aria-hidden="true"]').exists()).toBe(false)
+  })
+
+  it('ProductSplit alterna el lado de la foto', () => {
+    const page = (imageSide?: string) => ({
+      version: 2,
+      pages: [{ id: 's', layout: 'ProductSplit', props: imageSide ? { imageSide } : {}, slots: { products: ['1', '2'] } }],
+    })
+    const alt = mount(PageRenderer, { props: { page: page(), data } }).findAll('article')
+    expect(alt).toHaveLength(2)
+    expect(alt[0].classes()).not.toContain('flex-row-reverse')
+    expect(alt[1].classes()).toContain('flex-row-reverse')
+
+    const der = mount(PageRenderer, { props: { page: page('derecha'), data } }).findAll('article')
+    expect(der.every((a) => a.classes().includes('flex-row-reverse'))).toBe(true)
+  })
 })

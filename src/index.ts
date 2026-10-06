@@ -14,6 +14,8 @@ export { FeatureStripDefinition } from './components/FeatureStrip/FeatureStrip.d
 export { WesternHeroDefinition } from './components/WesternHero/WesternHero.definition'
 export { ProductShowcaseDefinition } from './components/ProductShowcase/ProductShowcase.definition'
 export { ProductGalleryDefinition } from './components/ProductGallery/ProductGallery.definition'
+export { PriceListDefinition } from './components/PriceList/PriceList.definition'
+export { ProductSplitDefinition } from './components/ProductSplit/ProductSplit.definition'
 export * from './editing'
 export * from './templates'
 import './style.css'

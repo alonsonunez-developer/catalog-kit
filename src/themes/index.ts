@@ -53,6 +53,19 @@ export const themes: Record<string, Theme> = {
     fonts: { heading: "'Libre Baskerville', Georgia, serif", body: "'Inter', system-ui, sans-serif" },
     radius: '0rem',
   },
+  restaurante: {
+    name: 'restaurante',
+    colors: {
+      primary: '#9c3d2e',
+      background: '#fbf7f0',
+      surface: '#f1e8d8',
+      text: '#2b2118',
+      muted: '#6e6155',
+      onPrimary: '#ffffff',
+    },
+    fonts: { heading: "'Cormorant Garamond', Georgia, serif", body: "'DM Sans', system-ui, sans-serif" },
+    radius: '0.125rem',
+  },
 }
 
 export function resolveTheme(theme: string | Theme): Theme {

@@ -65,6 +65,24 @@ export const catalogTemplates: CatalogTemplate[] = [
     coverLayout: 'WesternHero',
     coverProps: { eyebrow: 'Nuevos esenciales' },
   },
+  {
+    id: 'menu',
+    name: 'Menú',
+    description: 'Portada, lista de precios sin fotos (12 por página, con la categoría como título) y contacto. Para restaurantes, cafeterías y tarifas.',
+    theme: 'restaurante',
+    productLayout: 'PriceList',
+    groupByCategory: true,
+    includeContact: true,
+  },
+  {
+    id: 'destacados',
+    name: 'Destacados',
+    description: 'Portada, 2 productos por página con foto grande y texto al lado, y contacto. Para pastelerías y productos con historia.',
+    theme: 'pasteleria',
+    productLayout: 'ProductSplit',
+    groupByCategory: true,
+    includeContact: true,
+  },
 ]
 
 export interface BuildInput {

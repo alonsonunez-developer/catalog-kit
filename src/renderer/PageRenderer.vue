@@ -30,7 +30,9 @@ watch(catalogData, (d) => {
 })
 
 const themeStyle = computed(() =>
-  parsed.value.success ? themeToStyle(resolveTheme(parsed.value.data.theme)) : {},
+  parsed.value.success
+    ? themeToStyle(resolveTheme(parsed.value.data.theme, catalogData.value.brandTheme))
+    : {},
 )
 
 const items = computed(() => {

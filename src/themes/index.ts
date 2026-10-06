@@ -68,8 +68,13 @@ export const themes: Record<string, Theme> = {
   },
 }
 
-export function resolveTheme(theme: string | Theme): Theme {
-  return typeof theme === 'string' ? (themes[theme] ?? themes.joyeria) : theme
+// "brand" = los colores del negocio. Si el negocio no tiene tema de marca, cae a joyería.
+export const BRAND_THEME = 'brand'
+
+export function resolveTheme(theme: string | Theme, brand?: Theme | null): Theme {
+  if (typeof theme !== 'string') return theme
+  if (theme === BRAND_THEME) return brand ?? themes.joyeria
+  return themes[theme] ?? themes.joyeria
 }
 
 export function themeToStyle(t: Theme): Record<string, string> {

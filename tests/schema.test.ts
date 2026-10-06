@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PageSchema, ProductSchema, CatalogDataSchema, pageEntries, productImages } from '../src/schema'
+import { PageSchema, ProductSchema, CatalogDataSchema, pageEntries, productImages, ThemeSchema } from '../src/schema'
 
 describe('PageSchema', () => {
   it('acepta una página válida y aplica el tema por defecto', () => {
@@ -29,6 +29,16 @@ describe('datos del catálogo', () => {
   it('completa moneda, categorías y productos por defecto', () => {
     const d = CatalogDataSchema.parse({})
     expect(d).toEqual({ currency: 'MXN', business: {}, attributeDefs: [], categories: [], products: [] })
+  })
+  
+  it('acepta un tema de marca válido (o null) y rechaza uno inválido', () => {
+    expect(CatalogDataSchema.safeParse({ brandTheme: null }).success).toBe(true)
+    expect(CatalogDataSchema.safeParse({ brandTheme: ThemeSchema.parse({
+      name: 'x',
+      colors: { primary: '#111111', background: '#ffffff', surface: '#eeeeee', text: '#000000', muted: '#555555', onPrimary: '#ffffff' },
+      fonts: { heading: 'Inter', body: 'Inter' },
+    }) }).success).toBe(true)
+    expect(CatalogDataSchema.safeParse({ brandTheme: { name: 'x' } }).success).toBe(false)
   })
 })
 

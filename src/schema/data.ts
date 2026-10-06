@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ThemeSchema } from './theme'
 
 export const CategorySchema = z.object({
   id: z.string(),
@@ -40,6 +41,7 @@ export const BusinessSchema = z.object({
 export const CatalogDataSchema = z.object({
   currency: z.string().default('MXN'),
   business: BusinessSchema.default({}),
+  brandTheme: ThemeSchema.nullish(), // tema de marca del negocio (lo usan los catálogos con theme "brand")
   attributeDefs: z.array(AttributeDefSchema).default([]),
   categories: z.array(CategorySchema).default([]),
   products: z.array(ProductSchema).default([]),

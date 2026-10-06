@@ -8,6 +8,7 @@ import {
   radiusOptions,
   readableOn,
   themes,
+  resolveTheme,
 } from '../src/themes'
 
 describe('temas personalizados', () => {
@@ -63,5 +64,13 @@ describe('temas personalizados', () => {
     expect(ok.success).toBe(true)
     const bad = PageSchema.safeParse({ version: 2, theme: { name: 'x' }, pages: [] })
     expect(bad.success).toBe(false)
+  })
+
+  it('"brand" usa el tema del negocio y, sin él, cae a joyería', () => {
+    const brand = customizeTheme(themes.pasteleria, { colors: { primary: '#cc0000' } })
+    expect(resolveTheme('brand', brand).colors.primary).toBe('#cc0000')
+    expect(resolveTheme('brand').name).toBe('joyeria')
+    expect(resolveTheme('brand', null).name).toBe('joyeria')
+    expect(resolveTheme('pasteleria', brand).name).toBe('pasteleria')
   })
 })

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PageSchema, ProductSchema, CatalogDataSchema, pageEntries } from '../src/schema'
+import { PageSchema, ProductSchema, CatalogDataSchema, pageEntries, productImages } from '../src/schema'
 
 describe('PageSchema', () => {
   it('acepta una página válida y aplica el tema por defecto', () => {
@@ -61,5 +61,13 @@ describe('Page v2 y productos con atributos', () => {
 
   it('rechaza atributos que no sean texto o lista de textos', () => {
     expect(ProductSchema.safeParse({ id: '1', name: 'X', price: 1, attributes: { talla: 5 } }).success).toBe(false)
+  })
+})
+
+describe('productImages', () => {
+  it('prefiere "images" y cae a "image" si no hay galería', () => {
+    expect(productImages({ image: 'x', images: ['a', 'b'] })).toEqual(['a', 'b'])
+    expect(productImages({ image: 'x', images: [] })).toEqual(['x'])
+    expect(productImages({})).toEqual([])
   })
 })

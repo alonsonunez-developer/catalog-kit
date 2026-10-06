@@ -13,6 +13,7 @@ import { ProductGrid4Definition } from './ProductGrid4/ProductGrid4.definition'
 import { FeatureStripDefinition } from './FeatureStrip/FeatureStrip.definition'
 import { WesternHeroDefinition } from './WesternHero/WesternHero.definition'
 import { ProductShowcaseDefinition } from './ProductShowcase/ProductShowcase.definition'
+import { ProductGalleryDefinition } from './ProductGallery/ProductGallery.definition'
 
 export const builtinComponents = [
   HeroDefinition,
@@ -30,4 +31,5 @@ export const builtinComponents = [
   FeatureStripDefinition,
   WesternHeroDefinition,
   ProductShowcaseDefinition,
+  ProductGalleryDefinition,
 ]

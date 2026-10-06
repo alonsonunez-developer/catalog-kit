@@ -282,6 +282,37 @@ describe('PageRenderer', () => {
     expect(w.text()).toContain('01 / Pasteles')
   })
 
+  it('ProductGallery muestra todas las fotos, miniaturas y contador', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'g', layout: 'ProductGallery', slots: { products: ['c1'] } }] },
+        data: { products: [{ id: 'c1', name: 'Chamarra', price: 900, images: ['a.jpg', 'b.jpg', 'c.jpg'] }] },
+      },
+    })
+    expect(w.findAll('[data-testid="slide"] img')).toHaveLength(3)
+    expect(w.findAll('button[data-thumb]')).toHaveLength(3)
+    expect(w.text()).toContain('1 / 3')
+    expect(w.text()).toContain('Chamarra')
+  })
+
+  it('ProductGallery con una sola foto no muestra miniaturas, y sin fotos muestra la inicial', () => {
+    const una = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'g', layout: 'ProductGallery', slots: { products: ['c1'] } }] },
+        data: { products: [{ id: 'c1', name: 'Chamarra', price: 900, images: ['a.jpg'] }] },
+      },
+    })
+    expect(una.findAll('button[data-thumb]')).toHaveLength(0)
+
+    const ninguna = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'g', layout: 'ProductGallery', slots: { products: ['c1'] } }] },
+        data: { products: [{ id: 'c1', name: 'Chamarra', price: 900 }] },
+      },
+    })
+    expect(ninguna.find('[aria-hidden="true"]').text()).toBe('C')
+  })
+
   it('FeatureStrip numera las características', () => {
     const w = mount(PageRenderer, {
       props: {

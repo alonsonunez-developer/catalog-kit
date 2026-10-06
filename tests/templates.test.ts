@@ -3,6 +3,9 @@ import { builtinComponents } from '../src/components'
 import { PageSchema } from '../src/schema'
 import { themes } from '../src/themes'
 import { buildPageFromTemplate, catalogTemplates } from '../src/templates'
+import { mount } from '@vue/test-utils'
+import PageRenderer from '../src/renderer/PageRenderer.vue'
+import { sampleCatalog } from '../src/templates'
 
 const products = (n: number, prefix = 'p', categoryId?: string) =>
   Array.from({ length: n }, (_, i) => ({ id: `${prefix}${i + 1}`, categoryId }))
@@ -110,5 +113,20 @@ describe('plantillas', () => {
   it('la plantilla Destacados usa 2 productos por página', () => {
     const page = buildPageFromTemplate(template('destacados'), { title: 'X', products: products(3), categories: [] })
     expect(layouts(page)).toEqual(['Cover', 'ProductSplit', 'ProductSplit', 'ContactPage'])
+  })
+
+  it('cada plantilla se arma y se dibuja sin errores con los datos de ejemplo', () => {
+    for (const t of catalogTemplates) {
+      const page = buildPageFromTemplate(t, {
+        title: 'Demo',
+        products: sampleCatalog.products.map((p) => ({ id: p.id, categoryId: p.categoryId })),
+        categories: sampleCatalog.categories,
+      })
+      expect(PageSchema.safeParse(page).success, t.id).toBe(true)
+      page.pages.forEach((_, i) => {
+        const w = mount(PageRenderer, { props: { page, data: sampleCatalog, only: i } })
+        expect(w.text(), `${t.id}, página ${i + 1}`).not.toMatch(/inválid|desconocido/i)
+      })
+    }
   })
 })

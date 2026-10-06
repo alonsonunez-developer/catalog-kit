@@ -156,3 +156,5 @@ export function buildPageFromTemplate(template: CatalogTemplate, input: BuildInp
   }
   return { version: 2, theme: template.theme, pages }
 }
+
+export { sampleCatalog } from './sample'

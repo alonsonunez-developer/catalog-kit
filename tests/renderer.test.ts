@@ -257,6 +257,31 @@ describe('PageRenderer', () => {
     expect(w.text()).toContain('Color: Negro')
   })
 
+    it('WesternHero muestra etiqueta, título, marca y temporada', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: {
+          version: 2,
+          pages: [{ id: 'h', layout: 'WesternHero', props: { eyebrow: 'Nuevos esenciales', title: 'Frontier', season: 'OI 2026' } }],
+        },
+        data: { business: { name: 'Ranch' } },
+      },
+    })
+    for (const t of ['Nuevos esenciales', 'Frontier', 'OI 2026', 'Ranch']) expect(w.text()).toContain(t)
+  })
+
+  it('ProductShowcase muestra un destacado y los de apoyo', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'p', layout: 'ProductShowcase', slots: { products: ['1', '2', '3'] } }] },
+        data,
+      },
+    })
+    expect(w.findAll('article')).toHaveLength(3)
+    expect(w.find('h3').text()).toBe('Pastel de Fresa') // el primero es el destacado
+    expect(w.text()).toContain('01 / Pasteles')
+  })
+
   it('FeatureStrip numera las características', () => {
     const w = mount(PageRenderer, {
       props: {

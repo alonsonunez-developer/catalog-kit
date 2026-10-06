@@ -27,7 +27,7 @@ export const themes: Record<string, Theme> = {
     fonts: { heading: "'Pacifico', cursive", body: "'Nunito', system-ui, sans-serif" },
     radius: '1.25rem',
   },
-    deportivo: {
+  deportivo: {
     name: 'deportivo',
     colors: {
       primary: '#b94a1a',
@@ -38,6 +38,19 @@ export const themes: Record<string, Theme> = {
       onPrimary: '#ffffff',
     },
     fonts: { heading: "'Manrope', system-ui, sans-serif", body: "'Inter', system-ui, sans-serif" },
+    radius: '0rem',
+  },
+  western: {
+    name: 'western',
+    colors: {
+      primary: '#8a5a3b',
+      background: '#f3efe7',
+      surface: '#e8e1d3',
+      text: '#251e19',
+      muted: '#675f57',
+      onPrimary: '#ffffff',
+    },
+    fonts: { heading: "'Libre Baskerville', Georgia, serif", body: "'Inter', system-ui, sans-serif" },
     radius: '0rem',
   },
 }
@@ -73,6 +86,7 @@ export const fontOptions = [
   { label: 'DM Sans (limpia)', value: "'DM Sans', system-ui, sans-serif" },
   { label: 'Nunito (amable)', value: "'Nunito', system-ui, sans-serif" },
   { label: 'Manrope (deportiva, moderna)', value: "'Manrope', system-ui, sans-serif" },
+  { label: 'Libre Baskerville (serif western)', value: "'Libre Baskerville', Georgia, serif" },
 ]
 
 export const radiusOptions = [

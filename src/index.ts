@@ -15,6 +15,8 @@ export { ContactPageDefinition } from './components/ContactPage/ContactPage.defi
 export { SportHeroDefinition } from './components/SportHero/SportHero.definition'
 export { ProductGrid4Definition } from './components/ProductGrid4/ProductGrid4.definition'
 export { FeatureStripDefinition } from './components/FeatureStrip/FeatureStrip.definition'
+export { WesternHeroDefinition } from './components/WesternHero/WesternHero.definition'
+export { ProductShowcaseDefinition } from './components/ProductShowcase/ProductShowcase.definition'
 export * from './editing'
 export * from './templates'
 export { useCategoryFilter } from './renderer/context'

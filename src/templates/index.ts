@@ -54,6 +54,17 @@ export const catalogTemplates: CatalogTemplate[] = [
     coverLayout: 'SportHero',
     coverProps: { eyebrow: 'Nueva colección' },
   },
+  {
+    id: 'western',
+    name: 'Western',
+    description: 'Portada editorial, un producto destacado y tres de apoyo por página, y contacto. Para ropa western, botas y piel.',
+    theme: 'western',
+    productLayout: 'ProductShowcase',
+    groupByCategory: true,
+    includeContact: true,
+    coverLayout: 'WesternHero',
+    coverProps: { eyebrow: 'Nuevos esenciales' },
+  },
 ]
 
 export interface BuildInput {

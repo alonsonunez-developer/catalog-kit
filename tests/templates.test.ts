@@ -85,4 +85,10 @@ describe('plantillas', () => {
     expect(page.pages[0].props).toMatchObject({ title: 'Run', eyebrow: 'Nueva colección' })
     expect(PageSchema.safeParse(page).success).toBe(true)
   })
+  it('la plantilla Western usa portada western y 4 productos por página', () => {
+    const page = buildPageFromTemplate(template('western'), { title: 'Frontier', products: products(5), categories: [] })
+    expect(layouts(page)).toEqual(['WesternHero', 'ProductShowcase', 'ProductShowcase', 'ContactPage'])
+    expect(page.pages[1].slots.products).toHaveLength(4)
+    expect(PageSchema.safeParse(page).success).toBe(true)
+  })
 })

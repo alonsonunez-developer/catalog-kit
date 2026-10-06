@@ -11,6 +11,8 @@ import { ContactPageDefinition } from './ContactPage/ContactPage.definition'
 import { SportHeroDefinition } from './SportHero/SportHero.definition'
 import { ProductGrid4Definition } from './ProductGrid4/ProductGrid4.definition'
 import { FeatureStripDefinition } from './FeatureStrip/FeatureStrip.definition'
+import { WesternHeroDefinition } from './WesternHero/WesternHero.definition'
+import { ProductShowcaseDefinition } from './ProductShowcase/ProductShowcase.definition'
 
 export const builtinComponents = [
   HeroDefinition,
@@ -26,4 +28,6 @@ export const builtinComponents = [
   SportHeroDefinition,
   ProductGrid4Definition,
   FeatureStripDefinition,
+  WesternHeroDefinition,
+  ProductShowcaseDefinition,
 ]

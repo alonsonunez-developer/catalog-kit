@@ -27,6 +27,19 @@ export const themes: Record<string, Theme> = {
     fonts: { heading: "'Pacifico', cursive", body: "'Nunito', system-ui, sans-serif" },
     radius: '1.25rem',
   },
+    deportivo: {
+    name: 'deportivo',
+    colors: {
+      primary: '#b94a1a',
+      background: '#f6f6f3',
+      surface: '#f1f1ee',
+      text: '#171717',
+      muted: '#6b6b6b',
+      onPrimary: '#ffffff',
+    },
+    fonts: { heading: "'Manrope', system-ui, sans-serif", body: "'Inter', system-ui, sans-serif" },
+    radius: '0rem',
+  },
 }
 
 export function resolveTheme(theme: string | Theme): Theme {
@@ -59,6 +72,7 @@ export const fontOptions = [
   { label: 'Poppins (redondeada)', value: "'Poppins', system-ui, sans-serif" },
   { label: 'DM Sans (limpia)', value: "'DM Sans', system-ui, sans-serif" },
   { label: 'Nunito (amable)', value: "'Nunito', system-ui, sans-serif" },
+  { label: 'Manrope (deportiva, moderna)', value: "'Manrope', system-ui, sans-serif" },
 ]
 
 export const radiusOptions = [

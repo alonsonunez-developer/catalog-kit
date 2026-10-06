@@ -225,4 +225,45 @@ describe('PageRenderer', () => {
     })
     expect(conProps.text()).toContain('Otro Nombre')
   })
+  it('SportHero muestra etiqueta, título, marca y temporada', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: {
+          version: 2,
+          pages: [{ id: 'h', layout: 'SportHero', props: { eyebrow: 'Nueva colección', title: 'Mueve', season: 'PV 2026' } }],
+        },
+        data: { business: { name: 'North' } },
+      },
+    })
+    for (const t of ['Nueva colección', 'Mueve', 'PV 2026', 'North']) expect(w.text()).toContain(t)
+  })
+
+  it('ProductGrid4 admite 4 productos, con número, categoría y atributos', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: {
+          version: 2,
+          pages: [{ id: 'p', layout: 'ProductGrid4', slots: { products: ['1', '2', '3', '1', '2'] } }],
+        },
+        data: {
+          ...data,
+          attributeDefs: [{ key: 'color', label: 'Color', type: 'text' as const }],
+          products: data.products.map((p) => ({ ...p, attributes: { color: 'Negro' } })),
+        },
+      },
+    })
+    expect(w.findAll('article')).toHaveLength(4)
+    expect(w.text()).toContain('01 / Pasteles')
+    expect(w.text()).toContain('Color: Negro')
+  })
+
+  it('FeatureStrip numera las características', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'f', layout: 'FeatureStrip', props: { features: ['Ligero', 'Flexible'] } }] },
+      },
+    })
+    expect(w.text()).toContain('01')
+    expect(w.text()).toContain('Flexible')
+  })
 })

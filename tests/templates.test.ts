@@ -77,4 +77,12 @@ describe('plantillas', () => {
     const ids = page.pages.map((p) => p.id)
     expect(new Set(ids).size).toBe(ids.length)
   })
+
+  it('la plantilla Deportivo usa portada deportiva y 4 productos por página', () => {
+    const page = buildPageFromTemplate(template('deportivo'), { title: 'Run', products: products(9), categories: [] })
+    expect(layouts(page)).toEqual(['SportHero', 'ProductGrid4', 'ProductGrid4', 'ProductGrid4', 'ContactPage'])
+    expect(page.pages.slice(1, 4).map((p) => p.slots.products.length)).toEqual([4, 4, 1])
+    expect(page.pages[0].props).toMatchObject({ title: 'Run', eyebrow: 'Nueva colección' })
+    expect(PageSchema.safeParse(page).success).toBe(true)
+  })
 })

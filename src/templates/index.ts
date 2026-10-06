@@ -11,6 +11,8 @@ export interface CatalogTemplate {
   productLayout: string // layout (categoría "page-layout") que se repite para los productos
   groupByCategory: boolean // cada categoría empieza en página nueva
   includeContact: boolean
+  coverLayout?: string // por defecto "Cover"
+  coverProps?: Record<string, unknown> // textos fijos de la portada (el título y el subtítulo del catálogo los sobrescriben)
 }
 
 export const catalogTemplates: CatalogTemplate[] = [
@@ -41,6 +43,17 @@ export const catalogTemplates: CatalogTemplate[] = [
     groupByCategory: false,
     includeContact: true,
   },
+  {
+    id: 'deportivo',
+    name: 'Deportivo',
+    description: 'Portada con foto, 4 productos por página con colores y tallas, y contacto. Pensado para ropa deportiva.',
+    theme: 'deportivo',
+    productLayout: 'ProductGrid4',
+    groupByCategory: true,
+    includeContact: true,
+    coverLayout: 'SportHero',
+    coverProps: { eyebrow: 'Nueva colección' },
+  },
 ]
 
 export interface BuildInput {
@@ -64,6 +77,10 @@ export function buildPageFromTemplate(template: CatalogTemplate, input: BuildInp
   if (!def || def.category !== 'page-layout') {
     throw new Error(`La plantilla "${template.id}" usa un layout inexistente: ${template.productLayout}`)
   }
+  const coverLayout = template.coverLayout ?? 'Cover'
+  if (!builtinComponents.some((c) => c.name === coverLayout)) {
+    throw new Error(`La plantilla "${template.id}" usa una portada inexistente: ${coverLayout}`)
+  }
   const capacity = def.slots?.products?.max ?? 1
   // Solo se pasa "title" a los layouts que lo admiten
   const acceptsTitle = 'title' in (def.propsSchema.parse({}) as object)
@@ -81,11 +98,16 @@ export function buildPageFromTemplate(template: CatalogTemplate, input: BuildInp
     groups.push({ title: '', ids: input.products.map((p) => p.id) })
   }
 
+  const coverProps = template.coverProps ?? {}
   const pages: PageV2['pages'] = [
     {
       id: 'cover',
-      layout: 'Cover',
-      props: { title: input.title, subtitle: input.subtitle ?? '' },
+      layout: coverLayout,
+      props: {
+        ...coverProps,
+        title: input.title,
+        subtitle: input.subtitle || (typeof coverProps.subtitle === 'string' ? coverProps.subtitle : ''),
+      },
       slots: {},
     },
   ]

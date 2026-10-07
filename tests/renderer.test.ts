@@ -366,4 +366,16 @@ describe('PageRenderer', () => {
     const der = mount(PageRenderer, { props: { page: page('derecha'), data } }).findAll('article')
     expect(der.every((a) => a.classes().includes('flex-row-reverse'))).toBe(true)
   })
+
+  it('las fotos de producto se muestran completas (object-contain)', () => {
+    const w = mount(PageRenderer, {
+      props: {
+        page: { version: 2, pages: [{ id: 'p', layout: 'ProductDuo', slots: { products: ['a'] } }] },
+        data: { products: [{ id: 'a', name: 'Bota', price: 1, images: ['a.jpg'] }] },
+      },
+    })
+    const img = w.find('article img')
+    expect(img.classes()).toContain('object-contain')
+    expect(img.classes()).not.toContain('object-cover')
+  })
 })

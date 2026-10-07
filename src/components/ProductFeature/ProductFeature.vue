@@ -33,7 +33,7 @@ const rows = computed(() => {
   <section class="flex flex-col" :style="{ backgroundColor: 'var(--ck-bg)', color: 'var(--ck-text)' }">
     <template v-if="product">
       <div class="aspect-[4/5] w-full overflow-hidden" :style="{ backgroundColor: 'var(--ck-surface)' }">
-        <img v-if="image" :src="image" :alt="product.name" class="h-full w-full object-cover" />
+        <img v-if="image" :src="image" :alt="product.name" class="h-full w-full object-contain" />
         <div
           v-else
           class="flex h-full w-full items-center justify-center text-7xl"

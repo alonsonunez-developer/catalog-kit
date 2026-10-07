@@ -21,7 +21,7 @@ const formattedPrice = computed(() =>
     :style="{ backgroundColor: 'var(--ck-surface)', color: 'var(--ck-text)', borderRadius: 'var(--ck-radius)' }"
   >
     <div class="aspect-square w-full overflow-hidden" :style="{ backgroundColor: 'var(--ck-bg)' }">
-      <img v-if="image" :src="image" :alt="name" loading="lazy" class="h-full w-full object-cover" />
+      <img v-if="image" :src="image" :alt="name" loading="lazy" class="h-full w-full object-contain" />
       <div
         v-else
         class="flex h-full w-full items-center justify-center text-4xl"

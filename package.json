@@ -2,7 +2,7 @@
   "name": "@alonsonunez-developer/catalog-kit",
   "repository": { "type": "git", "url": "git+https://github.com/alonsonunez-developer/catalog-kit.git" },
   "publishConfig": { "registry": "https://npm.pkg.github.com" },
-  "version": "0.1.7",
+  "version": "0.1.8",
   "type": "module",
   "files": [
     "dist"

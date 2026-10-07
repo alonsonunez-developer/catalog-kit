@@ -29,6 +29,8 @@ export const PageV1Schema = z.object({
 export const PageV2Schema = z.object({
   version: z.literal(2),
   theme: themeField,
+  // Cómo se muestra en el visualizador en pantallas anchas. Sin valor = una página.
+  display: z.enum(['single', 'double']).optional(),
   pages: z.array(PageEntrySchema),
 })
 

@@ -72,6 +72,13 @@ describe('Page v2 y productos con atributos', () => {
   it('rechaza atributos que no sean texto o lista de textos', () => {
     expect(ProductSchema.safeParse({ id: '1', name: 'X', price: 1, attributes: { talla: 5 } }).success).toBe(false)
   })
+
+  it('acepta display single/double (opcional) y rechaza otros valores', () => {
+    const base = { version: 2, pages: [] }
+    expect(PageSchema.safeParse(base).success).toBe(true)
+    expect(PageSchema.safeParse({ ...base, display: 'double' }).success).toBe(true)
+    expect(PageSchema.safeParse({ ...base, display: 'triple' }).success).toBe(false)
+  })
 })
 
 describe('productImages', () => {

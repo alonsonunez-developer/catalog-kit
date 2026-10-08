@@ -1,10 +1,12 @@
 import { z } from 'zod'
 import { defineComponent } from '../../registry'
 import ProductGrid8 from './ProductGrid8.vue'
+import { imageProps } from '../shared/imageProps'
 
 export const ProductGrid8PropsSchema = z.object({
   title: z.string().default(''),
   showSku: z.boolean().default(true),
+  ...imageProps
 })
 
 export const ProductGrid8Definition = defineComponent({

@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { defineComponent } from '../../registry'
 import ProductSplit from './ProductSplit.vue'
+import { imageProps } from '../shared/imageProps'
 
 export const ProductSplitPropsSchema = z.object({
   imageSide: z.enum(['alternar', 'izquierda', 'derecha']).default('alternar'),
@@ -8,6 +9,7 @@ export const ProductSplitPropsSchema = z.object({
   showSku: z.boolean().default(false),
   showAttributes: z.boolean().default(true),
   attributeKeys: z.array(z.string()).default([]), // vacío = todos los atributos del producto
+  ...imageProps
 })
 
 export const ProductSplitDefinition = defineComponent({

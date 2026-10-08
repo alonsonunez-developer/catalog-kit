@@ -12,6 +12,8 @@ const props = defineProps<{
   showSku: boolean
   showAttributes: boolean
   attributeKeys: string[]
+  imageFit: 'completa' | 'recortada'
+  imageBg: 'tema' | 'blanco' | 'transparente'
 }>()
 
 const data = useCatalogData()
@@ -50,7 +52,7 @@ const cards = computed(() =>
     <div class="grid grid-cols-2 gap-x-3 gap-y-8">
       <article v-for="(c, i) in cards" :key="`${c.product.id}-${i}`" class="flex flex-col gap-2">
         <div class="aspect-[4/5] w-full overflow-hidden" :style="{ borderRadius: 'var(--ck-radius)' }">
-          <ProductImage :name="c.product.name" :src="productImages(c.product)[0]" />
+          <ProductImage :fit="imageFit" :bg="imageBg" :name="c.product.name" :src="productImages(c.product)[0]" />
         </div>
         <p class="text-[10px] uppercase tracking-[0.15em]" :style="{ color: 'var(--ck-muted)' }">{{ c.label }}</p>
         <h3 class="text-sm font-medium leading-tight">{{ c.product.name }}</h3>

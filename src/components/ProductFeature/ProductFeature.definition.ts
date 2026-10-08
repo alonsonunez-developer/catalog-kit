@@ -1,10 +1,12 @@
 import { z } from 'zod'
 import { defineComponent } from '../../registry'
 import ProductFeature from './ProductFeature.vue'
+import { imageProps } from '../shared/imageProps'
 
 export const ProductFeaturePropsSchema = z.object({
   showDescription: z.boolean().default(true),
   attributeKeys: z.array(z.string()).default([]), // vacío = todos los atributos del producto
+  ...imageProps
 })
 
 export const ProductFeatureDefinition = defineComponent({

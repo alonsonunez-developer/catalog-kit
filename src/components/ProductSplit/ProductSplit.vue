@@ -12,6 +12,8 @@ const props = defineProps<{
   showSku: boolean
   showAttributes: boolean
   attributeKeys: string[]
+  imageFit: 'completa' | 'recortada'
+  imageBg: 'tema' | 'blanco' | 'transparente'
 }>()
 
 const data = useCatalogData()
@@ -45,7 +47,7 @@ const items = computed(() =>
       :class="reversed(i) ? 'flex-row-reverse' : 'flex-row'"
     >
       <div class="aspect-[3/4] w-[55%] shrink-0 overflow-hidden" :style="{ borderRadius: 'var(--ck-radius)' }">
-        <ProductImage :name="it.product.name" :src="productImages(it.product)[0]" />
+        <ProductImage :fit="imageFit" :bg="imageBg" :name="it.product.name" :src="productImages(it.product)[0]" />
       </div>
       <div class="flex min-w-0 flex-1 flex-col gap-2">
         <h3 class="break-words text-xl leading-tight" :style="{ fontFamily: 'var(--ck-font-heading)' }">

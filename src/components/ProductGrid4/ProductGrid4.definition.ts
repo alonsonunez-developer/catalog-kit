@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { defineComponent } from '../../registry'
 import ProductGrid4 from './ProductGrid4.vue'
+import { imageProps } from '../shared/imageProps'
 
 export const ProductGrid4PropsSchema = z.object({
   title: z.string().default(''),
@@ -8,6 +9,7 @@ export const ProductGrid4PropsSchema = z.object({
   showSku: z.boolean().default(false),
   showAttributes: z.boolean().default(true),
   attributeKeys: z.array(z.string()).default([]), // vacío = todos los atributos del producto
+  ...imageProps
 })
 
 export const ProductGrid4Definition = defineComponent({

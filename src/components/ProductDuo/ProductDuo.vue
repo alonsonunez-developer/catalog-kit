@@ -4,7 +4,11 @@ import { productImages, type Product } from '../../schema/data'
 import PriceTag from '../shared/PriceTag.vue'
 import ProductImage from '../shared/ProductImage.vue'
 
-defineProps<{ products: Product[]; showSku: boolean }>()
+defineProps<{ products: Product[]
+  showSku: boolean
+  imageFit: 'completa' | 'recortada'
+  imageBg: 'tema' | 'blanco' | 'transparente'
+}>()
 
 const data = useCatalogData()
 </script>
@@ -18,7 +22,7 @@ const data = useCatalogData()
       :style="{ backgroundColor: 'var(--ck-surface)', borderRadius: 'var(--ck-radius)' }"
     >
       <div class="aspect-[4/3] w-full">
-        <ProductImage :name="p.name" :src="productImages(p)[0]" />
+        <ProductImage :fit="imageFit" :bg="imageBg" :name="p.name" :src="productImages(p)[0]" />
       </div>
       <div class="flex items-start justify-between gap-3 p-4">
         <div>

@@ -367,15 +367,28 @@ describe('PageRenderer', () => {
     expect(der.every((a) => a.classes().includes('flex-row-reverse'))).toBe(true)
   })
 
-  it('las fotos de producto se muestran completas (object-contain)', () => {
-    const w = mount(PageRenderer, {
-      props: {
-        page: { version: 2, pages: [{ id: 'p', layout: 'ProductDuo', slots: { products: ['a'] } }] },
-        data: { products: [{ id: 'a', name: 'Bota', price: 1, images: ['a.jpg'] }] },
-      },
+  it('las fotos se muestran completas por defecto y se pueden recortar o cambiar de fondo', () => {
+    const pageWith = (props: Record<string, unknown>) => ({
+      version: 2,
+      pages: [{ id: 'p', layout: 'ProductDuo', props, slots: { products: ['a'] } }],
     })
-    const img = w.find('article img')
-    expect(img.classes()).toContain('object-contain')
-    expect(img.classes()).not.toContain('object-cover')
+    const data = { products: [{ id: 'a', name: 'Bota', price: 1, images: ['a.jpg'] }] }
+
+    const normal = mount(PageRenderer, { props: { page: pageWith({}), data } })
+    expect(normal.find('article img').classes()).toContain('object-contain')
+
+    const recortada = mount(PageRenderer, { props: { page: pageWith({ imageFit: 'recortada' }), data } })
+    expect(recortada.find('article img').classes()).toContain('object-cover')
+
+    const blanco = mount(PageRenderer, { props: { page: pageWith({ imageBg: 'blanco' }), data } })
+    const box = blanco.find('article img').element.parentElement as HTMLElement
+    expect(box.style.backgroundColor).toBe('rgb(255, 255, 255)')
+  })
+
+  it('las opciones de foto rechazan valores desconocidos', () => {
+    const w = mount(PageRenderer, {
+      props: { page: { version: 2, pages: [{ id: 'p', layout: 'ProductDuo', props: { imageFit: 'estirada' } }] } },
+    })
+    expect(w.text()).toContain('Props inválidas')
   })
 })

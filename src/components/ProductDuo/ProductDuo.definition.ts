@@ -1,9 +1,11 @@
 import { z } from 'zod'
 import { defineComponent } from '../../registry'
 import ProductDuo from './ProductDuo.vue'
+import { imageProps } from '../shared/imageProps'
 
 export const ProductDuoPropsSchema = z.object({
   showSku: z.boolean().default(true),
+  ...imageProps
 })
 
 export const ProductDuoDefinition = defineComponent({

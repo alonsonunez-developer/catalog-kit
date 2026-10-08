@@ -3,11 +3,14 @@ import { computed } from 'vue'
 import { useCatalogData } from '../../renderer/context'
 import { formatPrice } from '../../renderer/format'
 import { productImages, type Product } from '../../schema/data'
+import ProductImage from '../shared/ProductImage.vue'
 
 const props = defineProps<{
   products: Product[]
   showDescription: boolean
   attributeKeys: string[]
+  imageFit: 'completa' | 'recortada'
+  imageBg: 'tema' | 'blanco' | 'transparente'
 }>()
 
 const data = useCatalogData()
@@ -32,16 +35,8 @@ const rows = computed(() => {
 <template>
   <section class="flex flex-col" :style="{ backgroundColor: 'var(--ck-bg)', color: 'var(--ck-text)' }">
     <template v-if="product">
-      <div class="aspect-[4/5] w-full overflow-hidden" :style="{ backgroundColor: 'var(--ck-surface)' }">
-        <img v-if="image" :src="image" :alt="product.name" class="h-full w-full object-contain" />
-        <div
-          v-else
-          class="flex h-full w-full items-center justify-center text-7xl"
-          :style="{ color: 'var(--ck-muted)', fontFamily: 'var(--ck-font-heading)' }"
-          aria-hidden="true"
-        >
-          {{ product.name.charAt(0).toUpperCase() }}
-        </div>
+      <div class="aspect-[4/5] w-full overflow-hidden">
+        <ProductImage :name="product.name" :src="image" :fit="imageFit" :bg="imageBg" />
       </div>
       <div class="flex flex-col gap-3 px-6 py-6">
         <div class="flex items-baseline justify-between gap-4">

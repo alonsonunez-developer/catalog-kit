@@ -11,6 +11,8 @@ const props = defineProps<{
   showSku: boolean
   showAttributes: boolean
   attributeKeys: string[]
+  imageFit: 'completa' | 'recortada'
+  imageBg: 'tema' | 'blanco' | 'transparente'
 }>()
 
 const data = useCatalogData()
@@ -64,10 +66,10 @@ const rows = computed(() => {
             data-testid="slide"
             class="aspect-[4/5] w-full shrink-0 snap-center"
           >
-            <ProductImage :name="product.name" :src="src" />
+            <ProductImage :fit="imageFit" :bg="imageBg" :name="product.name" :src="src" />
           </div>
           <div v-if="!images.length" class="aspect-[4/5] w-full shrink-0">
-            <ProductImage :name="product.name" />
+            <ProductImage :fit="imageFit" :bg="imageBg" :name="product.name" />
           </div>
         </div>
         <span

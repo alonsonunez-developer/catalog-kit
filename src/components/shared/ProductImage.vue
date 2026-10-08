@@ -1,16 +1,30 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ name: string; src?: string; fit?: 'contain' | 'cover' }>(), { fit: 'contain' })
+import { computed } from 'vue'
+
+const props = withDefaults(
+  defineProps<{
+    name: string
+    src?: string
+    fit?: 'completa' | 'recortada'
+    bg?: 'tema' | 'blanco' | 'transparente'
+  }>(),
+  { fit: 'completa', bg: 'tema' },
+)
+
+const background = computed(() =>
+  props.bg === 'blanco' ? '#ffffff' : props.bg === 'transparente' ? 'transparent' : 'var(--ck-surface)',
+)
 </script>
 
 <template>
-  <div class="h-full w-full overflow-hidden" :style="{ backgroundColor: 'var(--ck-surface)' }">
+  <div class="h-full w-full overflow-hidden" :style="{ backgroundColor: background }">
     <img
       v-if="src"
       :src="src"
       :alt="name"
       loading="lazy"
       class="h-full w-full"
-      :class="fit === 'cover' ? 'object-cover' : 'object-contain'"
+      :class="fit === 'recortada' ? 'object-cover' : 'object-contain'"
     />
     <div
       v-else

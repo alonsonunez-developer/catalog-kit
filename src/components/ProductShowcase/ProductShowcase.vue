@@ -12,6 +12,8 @@ const props = defineProps<{
   showSku: boolean
   showAttributes: boolean
   attributeKeys: string[]
+  imageFit: 'completa' | 'recortada'
+  imageBg: 'tema' | 'blanco' | 'transparente'
 }>()
 
 const data = useCatalogData()
@@ -48,7 +50,7 @@ const rest = computed(() => cards.value.slice(1))
 
     <article v-if="featured" class="flex flex-col gap-2">
       <div class="aspect-[4/5] w-full overflow-hidden" :style="{ borderRadius: 'var(--ck-radius)' }">
-        <ProductImage :name="featured.product.name" :src="productImages(featured.product)[0]" />
+        <ProductImage :fit="imageFit" :bg="imageBg" :name="featured.product.name" :src="productImages(featured.product)[0]" />
       </div>
       <p class="mt-1 text-[10px] uppercase tracking-[0.15em]" :style="{ color: 'var(--ck-primary)' }">
         {{ featured.label }}
@@ -73,7 +75,7 @@ const rest = computed(() => cards.value.slice(1))
     <div v-if="rest.length" class="mt-8 grid grid-cols-3 gap-3 border-t pt-6" :style="{ borderColor: 'var(--ck-primary)' }">
       <article v-for="(c, i) in rest" :key="`${c.product.id}-${i}`" class="flex flex-col gap-1.5">
         <div class="aspect-[3/4] w-full overflow-hidden" :style="{ borderRadius: 'var(--ck-radius)' }">
-          <ProductImage :name="c.product.name" :src="productImages(c.product)[0]" />
+          <ProductImage :fit="imageFit" :bg="imageBg" :name="c.product.name" :src="productImages(c.product)[0]" />
         </div>
         <p class="text-[9px] uppercase tracking-[0.12em]" :style="{ color: 'var(--ck-muted)' }">{{ c.label }}</p>
         <h3 class="text-xs font-medium leading-tight">{{ c.product.name }}</h3>

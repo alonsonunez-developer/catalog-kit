@@ -96,17 +96,23 @@ describe('plantillas', () => {
     expect(PageSchema.safeParse(page).success).toBe(true)
   })
   
-  it('la plantilla Menú reparte 12 productos por página y titula con la categoría', () => {
-    const page = buildPageFromTemplate(template('menu'), { title: 'Carta', products: products(25), categories: [] })
-    expect(layouts(page)).toEqual(['Cover', 'PriceList', 'PriceList', 'PriceList', 'ContactPage'])
-    expect(page.pages.slice(1, 4).map((p) => p.slots.products.length)).toEqual([12, 12, 1])
+  it('la plantilla Menú reparte 12 productos por página y junta varias categorías', () => {
+    const sinCategorias = buildPageFromTemplate(template('menu'), { title: 'Carta', products: products(25), categories: [] })
+    expect(layouts(sinCategorias)).toEqual(['Cover', 'PriceList', 'PriceList', 'PriceList', 'ContactPage'])
+    expect(sinCategorias.pages.slice(1, 4).map((p) => p.slots.products.length)).toEqual([12, 12, 1])
 
-    const porCategoria = buildPageFromTemplate(template('menu'), {
+    const page = buildPageFromTemplate(template('menu'), {
       title: 'Carta',
-      categories: [{ id: 'a', name: 'Postres' }],
-      products: products(2, 'a', 'a'),
+      categories: [
+        { id: 'a', name: 'Postres' },
+        { id: 'b', name: 'Bebidas' },
+      ],
+      products: [...products(3, 'b', 'b'), ...products(2, 'a', 'a'), { id: 'suelto' }],
     })
-    expect(porCategoria.pages[1].props.title).toBe('Postres')
+    // Una sola página con todo, ordenado por categoría y con el suelto al final
+    expect(layouts(page)).toEqual(['Cover', 'PriceList', 'ContactPage'])
+    expect(page.pages[1].slots.products).toEqual(['a1', 'a2', 'b1', 'b2', 'b3', 'suelto'])
+    expect(page.pages[1].props).toEqual({ showCategories: true })
     expect(PageSchema.safeParse(page).success).toBe(true)
   })
 

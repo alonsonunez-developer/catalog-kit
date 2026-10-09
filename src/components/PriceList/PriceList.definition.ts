@@ -7,6 +7,7 @@ export const PriceListPropsSchema = z.object({
   showDescription: z.boolean().default(true),
   showSku: z.boolean().default(false),
   showDots: z.boolean().default(true),
+  showCategories: z.boolean().default(false), // títulos de categoría dentro de la lista
   showAttributes: z.boolean().default(false),
   attributeKeys: z.array(z.string()).default([]), // vacío = todos los atributos del producto
 })

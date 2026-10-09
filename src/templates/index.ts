@@ -13,6 +13,7 @@ export interface CatalogTemplate {
   includeContact: boolean
   coverLayout?: string // por defecto "Cover"
   coverProps?: Record<string, unknown> // textos fijos de la portada (el título y el subtítulo del catálogo los sobrescriben)
+  packCategories?: boolean // varias categorías por página (con títulos), en vez de una categoría por página
 }
 
 export const catalogTemplates: CatalogTemplate[] = [
@@ -68,7 +69,8 @@ export const catalogTemplates: CatalogTemplate[] = [
   {
     id: 'menu',
     name: 'Menú',
-    description: 'Portada, lista de precios sin fotos (12 por página, con la categoría como título) y contacto. Para restaurantes, cafeterías y tarifas.',
+    description: 'Portada, lista de precios sin fotos (hasta 12 por página, varias categorías juntas con su título) y contacto. Para restaurantes, cafeterías y tarifas.',
+    packCategories: true,
     theme: 'restaurante',
     productLayout: 'PriceList',
     groupByCategory: true,
@@ -112,10 +114,20 @@ export function buildPageFromTemplate(template: CatalogTemplate, input: BuildInp
   }
   const capacity = def.slots?.products?.max ?? 1
   // Solo se pasa "title" a los layouts que lo admiten
-  const acceptsTitle = 'title' in (def.propsSchema.parse({}) as object)
+    // Solo se pasa "title" a los layouts que lo admiten
+  const accepted = def.propsSchema.parse({}) as object
+  const acceptsTitle = 'title' in accepted
+  const acceptsCategories = 'showCategories' in accepted
+  const pack = !!template.packCategories && acceptsCategories
 
   const groups: { title: string; ids: string[] }[] = []
-  if (template.groupByCategory && input.categories.length) {
+  if (pack) {
+    // Todos los productos en un solo flujo, ordenados por categoría (las sin categoría, al final)
+    const order = new Map(input.categories.map((c, i) => [c.id, i]))
+    const rank = (id?: string) => (id !== undefined && order.has(id) ? order.get(id)! : Number.MAX_SAFE_INTEGER)
+    const sorted = [...input.products].sort((a, b) => rank(a.categoryId) - rank(b.categoryId))
+    if (sorted.length) groups.push({ title: '', ids: sorted.map((p) => p.id) })
+  } else if (template.groupByCategory && input.categories.length) {
     const known = new Set(input.categories.map((c) => c.id))
     for (const c of input.categories) {
       const ids = input.products.filter((p) => p.categoryId === c.id).map((p) => p.id)
@@ -146,7 +158,10 @@ export function buildPageFromTemplate(template: CatalogTemplate, input: BuildInp
       pages.push({
         id: `p${n++}`,
         layout: template.productLayout,
-        props: acceptsTitle && g.title ? { title: g.title } : {},
+        props: {
+          ...(acceptsTitle && g.title ? { title: g.title } : {}),
+          ...(pack ? { showCategories: true } : {}),
+        },
         slots: { products: ids },
       })
     }

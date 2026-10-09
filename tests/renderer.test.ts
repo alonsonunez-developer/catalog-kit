@@ -391,4 +391,28 @@ describe('PageRenderer', () => {
     })
     expect(w.text()).toContain('Props inválidas')
   })
+
+  it('PriceList agrupa por categoría con títulos cuando showCategories está activo', () => {
+    const page = (showCategories: boolean) => ({
+      version: 2,
+      pages: [{ id: 'l', layout: 'PriceList', props: { showCategories }, slots: { products: ['1', '2', '3'] } }],
+    })
+    const data = {
+      categories: [
+        { id: 'a', name: 'Postres' },
+        { id: 'b', name: 'Bebidas' },
+      ],
+      products: [
+        { id: '1', name: 'Flan', price: 55, categoryId: 'a' },
+        { id: '2', name: 'Café', price: 40, categoryId: 'b' },
+        { id: '3', name: 'Servilletas', price: 5 },
+      ],
+    }
+    const con = mount(PageRenderer, { props: { page: page(true), data } })
+    expect(con.findAll('h3').map((h) => h.text())).toEqual(['Postres', 'Bebidas', 'Otros'])
+    expect(con.findAll('li')).toHaveLength(3)
+
+    const sin = mount(PageRenderer, { props: { page: page(false), data } })
+    expect(sin.findAll('h3')).toHaveLength(0)
+  })
 })

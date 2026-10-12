@@ -79,6 +79,13 @@ describe('Page v2 y productos con atributos', () => {
     expect(PageSchema.safeParse({ ...base, display: 'double' }).success).toBe(true)
     expect(PageSchema.safeParse({ ...base, display: 'triple' }).success).toBe(false)
   })
+
+  it('acepta showLogo y hideLogo opcionales, y rechaza valores que no son booleanos', () => {
+    const ok = PageSchema.safeParse({ version: 2, showLogo: true, pages: [{ id: 'a', layout: 'Cover', hideLogo: true }] })
+    expect(ok.success).toBe(true)
+    expect(PageSchema.safeParse({ version: 2, showLogo: 'si', pages: [] }).success).toBe(false)
+    expect(CatalogDataSchema.parse({ business: { logo: 'https://x.test/l.webp' } }).business.logo).toBe('https://x.test/l.webp')
+  })
 })
 
 describe('productImages', () => {

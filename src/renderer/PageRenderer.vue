@@ -21,6 +21,13 @@ provideCatalogData(catalogData)
 
 const productsById = computed(() => new Map(catalogData.value.products.map((p) => [p.id, p])))
 
+// Logo del negocio: solo en catálogos por páginas (v2) que lo activan
+const showLogo = computed(
+  () => parsed.value.success && parsed.value.data.version === 2 && parsed.value.data.showLogo === true,
+)
+const logoUrl = computed(() => catalogData.value.business.logo)
+const logoAlt = computed(() => catalogData.value.business.name ?? 'Logo')
+
 // Si la categoría seleccionada deja de existir (cambian los datos), se limpia el filtro
 const selectedCategory = provideCategoryFilter()
 watch(catalogData, (d) => {
@@ -53,7 +60,12 @@ const items = computed(() => {
         .filter((p) => p !== undefined)
         .slice(0, slot.max)
     }
-    return { id: s.id, component: def.component, props: componentProps }
+    return {
+      id: s.id,
+      component: def.component,
+      props: componentProps,
+      showLogo: showLogo.value && !s.hideLogo,
+    }
   })
 })
 </script>
@@ -64,7 +76,13 @@ const items = computed(() => {
   </div>
   <div v-else :style="{ ...themeStyle, backgroundColor: 'var(--ck-bg)', fontFamily: 'var(--ck-font-body)' }">
     <template v-for="item in items" :key="item.id">
-      <component :is="item.component" v-if="item.component" v-bind="item.props" />
+      <template v-if="item.component">
+        <!-- Franja del logo: arriba a la izquierda, en el flujo, para no tapar el contenido de la página -->
+        <div v-if="item.showLogo && logoUrl" class="px-6 pb-2 pt-4">
+          <img :src="logoUrl" :alt="logoAlt" class="h-10 w-auto max-w-[40%] object-contain object-left" />
+        </div>
+        <component :is="item.component" v-bind="item.props" />
+      </template>
       <div v-else class="m-4 rounded border border-red-400 bg-red-50 p-3 text-sm text-red-700">
         {{ item.error }}
       </div>

@@ -13,6 +13,7 @@ export const PageEntrySchema = z.object({
   layout: z.string(),
   props: z.record(z.string(), z.unknown()).default({}),
   slots: z.record(z.string(), z.array(z.string())).default({}),
+  hideLogo: z.boolean().optional(), // oculta el logo del negocio solo en esta página
 })
 
 // Nombre de un tema predefinido, "brand" (colores del negocio) o un tema completo
@@ -31,6 +32,8 @@ export const PageV2Schema = z.object({
   theme: themeField,
   // Cómo se muestra en el visualizador en pantallas anchas. Sin valor = una página.
   display: z.enum(['single', 'double']).optional(),
+  // Muestra el logo del negocio arriba a la izquierda de cada página
+  showLogo: z.boolean().optional(),
   pages: z.array(PageEntrySchema),
 })
 
@@ -40,11 +43,17 @@ export type Section = z.infer<typeof SectionSchema>
 export type PageEntry = z.infer<typeof PageEntrySchema>
 export type Page = z.infer<typeof PageSchema>
 
-// Vista común de v1 y v2: una lista de { id, type, props, slots }
+// Vista común de v1 y v2: una lista de { id, type, props, slots, hideLogo }
 export function pageEntries(page: Page) {
   return page.version === 1
-    ? page.sections.map((s) => ({ id: s.id, type: s.type, props: s.props, slots: {} as Record<string, string[]> }))
-    : page.pages.map((p) => ({ id: p.id, type: p.layout, props: p.props, slots: p.slots }))
+    ? page.sections.map((s) => ({
+        id: s.id,
+        type: s.type,
+        props: s.props,
+        slots: {} as Record<string, string[]>,
+        hideLogo: undefined as boolean | undefined,
+      }))
+    : page.pages.map((p) => ({ id: p.id, type: p.layout, props: p.props, slots: p.slots, hideLogo: p.hideLogo }))
 }
 
 export * from './theme'

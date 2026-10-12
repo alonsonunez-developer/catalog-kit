@@ -415,4 +415,30 @@ describe('PageRenderer', () => {
     const sin = mount(PageRenderer, { props: { page: page(false), data } })
     expect(sin.findAll('h3')).toHaveLength(0)
   })
+
+  it('muestra el logo arriba de cada página si showLogo está activo y la página no lo oculta', () => {
+    const data = { business: { name: 'Dulce Hogar', logo: 'https://x.test/logo.webp' } }
+    const page = (extra: Record<string, unknown> = {}) => ({
+      version: 2,
+      ...extra,
+      pages: [
+        { id: 'a', layout: 'Cover' },
+        { id: 'b', layout: 'ContactPage', hideLogo: true },
+      ],
+    })
+
+    const conLogo = mount(PageRenderer, { props: { page: page({ showLogo: true }), data, only: 0 } })
+    expect(conLogo.find('img[alt="Dulce Hogar"]').attributes('src')).toBe('https://x.test/logo.webp')
+
+    const oculto = mount(PageRenderer, { props: { page: page({ showLogo: true }), data, only: 1 } })
+    expect(oculto.find('img').exists()).toBe(false)
+
+    const apagado = mount(PageRenderer, { props: { page: page(), data, only: 0 } })
+    expect(apagado.find('img').exists()).toBe(false)
+
+    const sinLogo = mount(PageRenderer, {
+      props: { page: page({ showLogo: true }), data: { business: { name: 'Dulce Hogar' } }, only: 0 },
+    })
+    expect(sinLogo.find('img').exists()).toBe(false)
+  })
 })

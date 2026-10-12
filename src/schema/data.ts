@@ -36,6 +36,7 @@ export const BusinessSchema = z.object({
   address: z.string().optional(),
   whatsapp: z.string().optional(),
   instagram: z.string().optional(),
+  logo: z.string().optional(), // URL del logo (se sube desde el dashboard)
 })
 
 export const CatalogDataSchema = z.object({

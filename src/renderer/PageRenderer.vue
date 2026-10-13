@@ -74,14 +74,26 @@ const items = computed(() => {
   <div v-if="!parsed.success" class="p-4 text-sm text-red-600">
     Page JSON inválido: {{ parsed.error.message }}
   </div>
-  <div v-else :style="{ ...themeStyle, backgroundColor: 'var(--ck-bg)', fontFamily: 'var(--ck-font-body)' }">
+  <div
+    v-else
+    class="flex flex-col"
+    :style="{
+      ...themeStyle,
+      backgroundColor: 'var(--ck-bg)',
+      fontFamily: 'var(--ck-font-body)',
+      minHeight: 'var(--ck-page-min-h, 0px)',
+    }"
+  >
     <template v-for="item in items" :key="item.id">
       <template v-if="item.component">
         <!-- Franja del logo: arriba a la izquierda, en el flujo, para no tapar el contenido de la página -->
         <div v-if="item.showLogo && logoUrl" class="px-6 pb-2 pt-4">
           <img :src="logoUrl" :alt="logoAlt" class="h-10 w-auto max-w-[40%] object-contain object-left" />
         </div>
-        <component :is="item.component" v-bind="item.props" />
+        <!-- Este contenedor ocupa el alto sobrante, para que el layout pueda centrarse o llenar la página -->
+        <div class="flex flex-1 flex-col">
+          <component :is="item.component" v-bind="item.props" />
+        </div>
       </template>
       <div v-else class="m-4 rounded border border-red-400 bg-red-50 p-3 text-sm text-red-700">
         {{ item.error }}

@@ -441,4 +441,16 @@ describe('PageRenderer', () => {
     })
     expect(sinLogo.find('img').exists()).toBe(false)
   })
+
+  it('ProductDuo con un solo producto usa una foto más alta y se centra', () => {
+    const page = (ids: string[]) => ({ version: 2, pages: [{ id: 'p', layout: 'ProductDuo', slots: { products: ids } }] })
+    const data = { products: [{ id: 'a', name: 'A', price: 1, images: ['a.jpg'] }, { id: 'b', name: 'B', price: 2, images: ['b.jpg'] }] }
+
+    const uno = mount(PageRenderer, { props: { page: page(['a']), data } })
+    expect(uno.find('article > div').classes()).toContain('aspect-[4/5]')
+    expect(uno.find('section').classes()).toContain('justify-center')
+
+    const dos = mount(PageRenderer, { props: { page: page(['a', 'b']), data } })
+    expect(dos.find('article > div').classes()).toContain('aspect-[4/3]')
+  })
 })

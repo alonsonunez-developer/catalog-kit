@@ -4,7 +4,8 @@ import { productImages, type Product } from '../../schema/data'
 import PriceTag from '../shared/PriceTag.vue'
 import ProductImage from '../shared/ProductImage.vue'
 
-defineProps<{ products: Product[]
+defineProps<{
+  products: Product[]
   showSku: boolean
   imageFit: 'completa' | 'recortada'
   imageBg: 'tema' | 'blanco' | 'transparente'
@@ -14,15 +15,19 @@ const data = useCatalogData()
 </script>
 
 <template>
-  <section class="flex flex-col gap-6 px-6 py-8" :style="{ backgroundColor: 'var(--ck-bg)', color: 'var(--ck-text)' }">
+  <section
+    class="flex flex-1 flex-col justify-center gap-6 px-6 py-8"
+    :style="{ backgroundColor: 'var(--ck-bg)', color: 'var(--ck-text)' }"
+  >
     <article
       v-for="(p, i) in products"
       :key="`${p.id}-${i}`"
       class="overflow-hidden"
       :style="{ backgroundColor: 'var(--ck-surface)', borderRadius: 'var(--ck-radius)' }"
     >
-      <div class="aspect-[4/3] w-full">
-        <ProductImage :fit="imageFit" :bg="imageBg" :name="p.name" :src="productImages(p)[0]" />
+      <!-- Con un solo producto la foto es más alta, para que la página no se vea vacía -->
+      <div class="w-full" :class="products.length === 1 ? 'aspect-[4/5]' : 'aspect-[4/3]'">
+        <ProductImage :name="p.name" :src="productImages(p)[0]" :fit="imageFit" :bg="imageBg" />
       </div>
       <div class="flex items-start justify-between gap-3 p-4">
         <div>

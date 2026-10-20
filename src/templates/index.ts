@@ -14,6 +14,7 @@ export interface CatalogTemplate {
   coverLayout?: string // por defecto "Cover"
   coverProps?: Record<string, unknown> // textos fijos de la portada (el título y el subtítulo del catálogo los sobrescriben)
   packCategories?: boolean // varias categorías por página (con títulos), en vez de una categoría por página
+  layoutProps?: Record<string, unknown> // props por defecto de cada página de productos
 }
 
 export const catalogTemplates: CatalogTemplate[] = [
@@ -84,6 +85,16 @@ export const catalogTemplates: CatalogTemplate[] = [
     productLayout: 'ProductSplit',
     groupByCategory: true,
     includeContact: true,
+  },
+  {
+    id: 'portada-lateral',
+    name: 'Portada lateral',
+    description: 'Portada, páginas con una imagen grande de un lado y 2 productos del otro (el lado se elige en el editor), y contacto.',
+    theme: 'western',
+    productLayout: 'CoverSplit',
+    groupByCategory: true,
+    includeContact: true,
+    layoutProps: { coverSide: 'derecha' },
   },
 ]
 
@@ -159,6 +170,7 @@ export function buildPageFromTemplate(template: CatalogTemplate, input: BuildInp
         id: `p${n++}`,
         layout: template.productLayout,
         props: {
+          ...(template.layoutProps ?? {}),
           ...(acceptsTitle && g.title ? { title: g.title } : {}),
           ...(pack ? { showCategories: true } : {}),
         },

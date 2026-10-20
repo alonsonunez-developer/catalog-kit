@@ -16,6 +16,7 @@ import { ProductShowcaseDefinition } from './ProductShowcase/ProductShowcase.def
 import { ProductGalleryDefinition } from './ProductGallery/ProductGallery.definition'
 import { PriceListDefinition } from './PriceList/PriceList.definition'
 import { ProductSplitDefinition } from './ProductSplit/ProductSplit.definition'
+import { CoverSplitDefinition } from './CoverSplit/CoverSplit.definition'
 
 export const builtinComponents = [
   HeroDefinition,
@@ -36,4 +37,5 @@ export const builtinComponents = [
   ProductGalleryDefinition,
   PriceListDefinition,
   ProductSplitDefinition,
+  CoverSplitDefinition,
 ]

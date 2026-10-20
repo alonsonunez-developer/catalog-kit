@@ -135,4 +135,15 @@ describe('plantillas', () => {
       })
     }
   })
+  it('la plantilla Portada lateral pone 2 productos por página y el lado por defecto', () => {
+    const page = buildPageFromTemplate(template('portada-lateral'), {
+      title: 'X',
+      categories: [{ id: 'a', name: 'Botas' }],
+      products: products(3, 'a', 'a'),
+    })
+    expect(layouts(page)).toEqual(['Cover', 'CoverSplit', 'CoverSplit', 'ContactPage'])
+    expect(page.pages[1].props).toEqual({ coverSide: 'derecha', title: 'Botas' })
+    expect(page.pages[1].slots.products).toHaveLength(2)
+    expect(PageSchema.safeParse(page).success).toBe(true)
+  })
 })

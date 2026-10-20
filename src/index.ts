@@ -16,6 +16,7 @@ export { ProductShowcaseDefinition } from './components/ProductShowcase/ProductS
 export { ProductGalleryDefinition } from './components/ProductGallery/ProductGallery.definition'
 export { PriceListDefinition } from './components/PriceList/PriceList.definition'
 export { ProductSplitDefinition } from './components/ProductSplit/ProductSplit.definition'
+export { CoverSplitDefinition } from './components/CoverSplit/CoverSplit.definition'
 export * from './editing'
 export * from './templates'
 import './style.css'

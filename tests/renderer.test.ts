@@ -453,4 +453,33 @@ describe('PageRenderer', () => {
     const dos = mount(PageRenderer, { props: { page: page(['a', 'b']), data } })
     expect(dos.find('article > div').classes()).toContain('aspect-[4/3]')
   })
+    
+  it('CoverSplit pone la imagen del lado elegido y los productos del opuesto', () => {
+    const page = (coverSide?: string) => ({
+      version: 2,
+      pages: [{
+        id: 's', layout: 'CoverSplit',
+        props: { image: 'c.jpg', title: 'Botas', ...(coverSide ? { coverSide } : {}) },
+        slots: { products: ['1', '2'] },
+      }],
+    })
+    const der = mount(PageRenderer, { props: { page: page(), data } })
+    const [img1, prod1] = der.find('section').findAll(':scope > div')
+    expect(img1.classes()).toContain('order-2')
+    expect(prod1.classes()).toContain('order-1')
+    expect(der.findAll('article')).toHaveLength(2)
+    expect(der.text()).toContain('Botas')
+
+    const izq = mount(PageRenderer, { props: { page: page('izquierda'), data } })
+    const [img2] = izq.find('section').findAll(':scope > div')
+    expect(img2.classes()).toContain('order-1')
+  })
+
+  it('CoverSplit sin imagen ni título sigue dibujando los productos', () => {
+    const w = mount(PageRenderer, {
+      props: { page: { version: 2, pages: [{ id: 's', layout: 'CoverSplit', slots: { products: ['1'] } }] }, data },
+    })
+    expect(w.findAll('article')).toHaveLength(1)
+    expect(w.find('section img').exists()).toBe(false)
+  })
 })

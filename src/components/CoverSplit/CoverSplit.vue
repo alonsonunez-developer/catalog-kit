@@ -42,14 +42,20 @@ const data = useCatalogData()
       </div>
     </div>
 
-    <!-- Productos, del lado opuesto -->
+    <!-- Productos, del lado opuesto. Se reparten la altura de la página en lugar de usar una proporción fija -->
     <div
-      class="flex min-w-0 flex-1 flex-col justify-center gap-5 p-4"
+      class="flex min-w-0 flex-1 flex-col justify-center gap-4 p-4"
       :class="coverSide === 'izquierda' ? 'order-2' : 'order-1'"
     >
-      <article v-for="(p, i) in products" :key="`${p.id}-${i}`" class="flex flex-col gap-1.5">
-        <div class="aspect-[3/4] w-full overflow-hidden" :style="{ borderRadius: 'var(--ck-radius)' }">
-          <ProductImage :name="p.name" :src="productImages(p)[0]" :fit="imageFit" :bg="imageBg" />
+      <article
+        v-for="(p, i) in products"
+        :key="`${p.id}-${i}`"
+        class="flex min-h-0 max-h-[30rem] flex-1 flex-col gap-1.5"
+      >
+        <div class="relative min-h-[8rem] flex-1">
+          <div class="absolute inset-0 overflow-hidden" :style="{ borderRadius: 'var(--ck-radius)' }">
+            <ProductImage :name="p.name" :src="productImages(p)[0]" :fit="imageFit" :bg="imageBg" />
+          </div>
         </div>
         <h3 class="break-words text-base leading-tight" :style="{ fontFamily: 'var(--ck-font-heading)' }">{{ p.name }}</h3>
         <p v-if="showSku && p.sku" class="text-[11px]" :style="{ color: 'var(--ck-muted)' }">Cód. {{ p.sku }}</p>
